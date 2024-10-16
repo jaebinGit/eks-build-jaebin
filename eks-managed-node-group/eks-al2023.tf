@@ -32,7 +32,7 @@ module "eks" {
 
   # EKS Managed Node Group
   eks_managed_node_group_defaults = {
-    instance_types = ["t2.micro"]
+    instance_types = ["t3.small"]
   }
 
   eks_managed_node_groups = {
