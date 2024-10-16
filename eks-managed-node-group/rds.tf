@@ -85,6 +85,7 @@ resource "aws_db_instance" "mysql_instance" {
   password            = "password1234"                # 마스터 비밀번호 (보안 강화 필요)
   db_subnet_group_name = aws_db_subnet_group.mysql.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
+  skip_final_snapshot   = true  # 최종 스냅샷을 건너뜁니다.
 
   backup_retention_period = 1                         # 백업 보존 기간 1일
   publicly_accessible     = false                     # 퍼블릭 액세스 비활성화
