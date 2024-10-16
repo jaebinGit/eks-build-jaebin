@@ -87,7 +87,6 @@ resource "aws_db_instance" "mysql_instance" {
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
 
   backup_retention_period = 1                         # 백업 보존 기간 1일
-  preferred_backup_window = "07:00-09:00"             # 선호 백업 시간
   publicly_accessible     = false                     # 퍼블릭 액세스 비활성화
   storage_encrypted       = true                      # 스토리지 암호화 활성화
 
