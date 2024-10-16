@@ -27,7 +27,7 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-resource "aws_db_subnet_group" "aurora" {
+resource "aws_db_subnet_group" "mysql" {
   name       = "ecom-db-subnet-group"
   subnet_ids = module.vpc.intra_subnets
   tags = {
