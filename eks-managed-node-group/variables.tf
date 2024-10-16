@@ -23,12 +23,12 @@ variable "pem_location" {
 
 variable "terraform_aws_profile" {
   type = string
-  default = "jinsu"
+  default = "jaebin"
 }
 
 variable "terraform_workspace-name" {
   type = string
-  default = "jinsu"
+  default = "jaebin"
 }
 
 variable "aws_region" {

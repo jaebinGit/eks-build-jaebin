@@ -1,5 +1,4 @@
 resource "aws_iam_role" "ecom-role-ec2cli" {
-    
   name = "ecom-role-ec2cli"
 
   assume_role_policy = jsonencode({
@@ -15,8 +14,16 @@ resource "aws_iam_role" "ecom-role-ec2cli" {
       }
     ]
   })
+}
 
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore", "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"]
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.ecom-role-ec2cli.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "ecr" {
+  role       = aws_iam_role.ecom-role-ec2cli.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
 
 ######################################################################################################################
