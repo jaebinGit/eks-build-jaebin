@@ -7,8 +7,8 @@ module "eks" {
   cluster_name    = var.cluster-name
   cluster_version = var.cluster-version
 
-  cluster_endpoint_public_access  = false
-  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = false
 
   cluster_addons = {
     coredns = {
@@ -41,7 +41,7 @@ module "eks" {
       max_size     = 2
       desired_size = 1
 
-      instance_types = ["t2.micro"]
+      instance_types = ["t3.small"]
     }
   }
 }

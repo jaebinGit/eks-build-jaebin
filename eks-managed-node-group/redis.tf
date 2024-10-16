@@ -71,9 +71,8 @@ resource "aws_elasticache_replication_group" "redis" {
   subnet_group_name             = aws_elasticache_subnet_group.redis.name
   security_group_ids            = [aws_security_group.redis_sg.id]
 
-  automatic_failover_enabled    = false                    # 자동 장애 조치 비활성화 (비용 절감)
-  replicas_per_node_group       = 0                        # 복제본 없이 단일 노드 그룹
-  num_node_groups               = 1                        # 단일 노드 그룹
+  automatic_failover_enabled    = true  # 클러스터 모드에서는 true로 설정해야 함
+  num_cache_clusters            = 2     # 최소 2개의 노드 필요
 
   tags = {
     Name = "ecom-redis-replication-group"

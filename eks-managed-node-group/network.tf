@@ -54,7 +54,7 @@ resource "aws_security_group_rule" "allow-https-egress" {
   to_port                  = 443
   type                     = "egress"
   description              = "https egress"
-  cidr_blocks       = ["0.0.0.0/16"]
+  cidr_blocks       = ["0.0.0.0/0"]
 } 
 
 
@@ -100,9 +100,23 @@ resource "aws_vpc_endpoint" "ecom-endpoint-ssmmessages" {
   subnet_ids =module.vpc.private_subnets
 }
 
-resource "aws_vpc_endpoint" "ecom-endpoint-ecr" {
+# resource "aws_vpc_endpoint" "ecom-endpoint-ecr" {
+#   vpc_id            = module.vpc.vpc_id
+#   service_name      = "com.amazonaws.ap-northeast-2.ecr"
+#   vpc_endpoint_type = "Interface"
+#
+#   security_group_ids = [
+#     aws_security_group.ecom-sg-ssmendpoint.id,
+#   ]
+#
+#   private_dns_enabled = true
+#
+#   subnet_ids =module.vpc.private_subnets
+# }
+
+resource "aws_vpc_endpoint" "ecom-endpoint-ecr-dkr" {
   vpc_id            = module.vpc.vpc_id
-  service_name      = "com.amazonaws.ap-northeast-2.ecr"
+  service_name      = "com.amazonaws.ap-northeast-2.ecr.dkr"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -111,5 +125,19 @@ resource "aws_vpc_endpoint" "ecom-endpoint-ecr" {
 
   private_dns_enabled = true
 
-  subnet_ids =module.vpc.private_subnets
+  subnet_ids = module.vpc.private_subnets
+}
+
+resource "aws_vpc_endpoint" "ecom-endpoint-ecr-api" {
+  vpc_id            = module.vpc.vpc_id
+  service_name      = "com.amazonaws.ap-northeast-2.ecr.api"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.ecom-sg-ssmendpoint.id,
+  ]
+
+  private_dns_enabled = true
+
+  subnet_ids = module.vpc.private_subnets
 }
