@@ -24,11 +24,12 @@ resource "aws_security_group" "alb_sg" {
 # EKS 워커 노드 보안 그룹에 인바운드 규칙 추가
 resource "aws_security_group_rule" "allow_alb_to_nodeport" {
   type                     = "ingress"
-  from_port                = 30080  # Istio Ingress Gateway의 NodePort 번호
-  to_port                  = 30443  # Istio Ingress Gateway의 NodePort 번호
+  from_port                = 30080  # Istio Ingress Gateway의 NodePort 번호 시작
+  to_port                  = 30080  # Istio Ingress Gateway의 NodePort 번호 끝
   protocol                 = "tcp"
-  security_group_id        = module.eks.worker_security_group_id
+  security_group_id        = module.eks.node_security_group_id
   source_security_group_id = aws_security_group.alb_sg.id
+  description              = "Allow ALB to access NodePort 30080"
 }
 
 # Ingress 리소스에서 ALB 보안 그룹 ID를 참조하도록 변수 설정
