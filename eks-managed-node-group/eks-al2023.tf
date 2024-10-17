@@ -39,7 +39,7 @@ module "eks" {
     node = {
       min_size     = 2
       max_size     = 4
-      desired_size = 3
+      desired_size = 2
 
       instance_types = ["t3.large"]
     }

@@ -82,7 +82,8 @@ resource "aws_db_instance" "mysql_instance" {
   allocated_storage   = 20                            # 최소 스토리지(20GB)
   storage_type        = "gp2"                         # 일반 SSD 사용
   username            = "admin"                       # 마스터 사용자
-  password            = "password1234"                # 마스터 비밀번호 (보안 강화 필요)
+  password            = "dlwoqls123!"                # 마스터 비밀번호 (보안 강화 필요)
+  db_name             = "mozip"
   db_subnet_group_name = aws_db_subnet_group.mysql.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   skip_final_snapshot   = true  # 최종 스냅샷을 건너뜁니다.
