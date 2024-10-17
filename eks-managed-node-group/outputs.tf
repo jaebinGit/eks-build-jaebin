@@ -47,6 +47,8 @@ data "aws_eks_node_group" "worker_node_groups" {
   for_each        = module.eks.eks_managed_node_groups
   cluster_name    = module.eks.cluster_name
   node_group_name = each.key
+
+  depends_on = [module.eks]
 }
 
 # 2. 워커 노드의 보안 그룹 ID 추출
