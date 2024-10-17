@@ -42,15 +42,13 @@ output "alb_security_group_id" {
   value       = aws_security_group.alb_sg.id
 }
 
-# 워커 노드의 보안 그룹 ID를 변수로 설정
 locals {
   worker_sg_ids = flatten([
-    for ng in module.eks.eks_managed_node_group_security_group_ids :
-    ng.value
+    for ng in keys(module.eks.eks_managed_node_groups) :
+    module.eks.eks_managed_node_groups[ng]["resources"]["security_group_ids"]
   ])
 }
 
-# 워커 노드의 보안 그룹마다 보안 그룹 규칙 생성
 resource "aws_security_group_rule" "allow_api_server_to_worker_nodes_ingress" {
   for_each = toset(local.worker_sg_ids)
 
@@ -58,7 +56,7 @@ resource "aws_security_group_rule" "allow_api_server_to_worker_nodes_ingress" {
   from_port                = 443
   to_port                  = 443
   protocol                 = "tcp"
-  security_group_id        = each.value  # 워커 노드의 보안 그룹 ID
-  source_security_group_id = module.eks.cluster_security_group_id  # 클러스터(API 서버)의 보안 그룹 ID
+  security_group_id        = each.value
+  source_security_group_id = module.eks.cluster_security_group_id
   description              = "Allow API server to communicate with worker nodes on port 443"
 }
