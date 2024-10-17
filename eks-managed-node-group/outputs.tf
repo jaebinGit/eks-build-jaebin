@@ -42,33 +42,12 @@ output "alb_security_group_id" {
   value       = aws_security_group.alb_sg.id
 }
 
-# 1. 워커 노드의 보안 그룹 ID 추출
-locals {
-  worker_sg_ids = flatten([
-    for ng_name, ng_info in module.eks.eks_managed_node_groups :
-    ng_info.remote_access_security_group_id
-  ])
-}
-
-# 2. 보안 그룹 규칙 생성
-resource "aws_security_group_rule" "allow_api_server_to_worker_nodes_ingress" {
-  for_each = toset(local.worker_sg_ids)
-
+resource "aws_security_group_rule" "istio" {
+  description              = "Istio"
   type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
+  from_port                = 15017
+  to_port                  = 15017
   protocol                 = "tcp"
-  security_group_id        = each.value
   source_security_group_id = module.eks.cluster_security_group_id
-  description              = "Allow API server to communicate with worker nodes on port 443"
-}
-
-resource "aws_security_group_rule" "allow_istiod_webhook" {
-  type              = "ingress"
-  from_port         = 15017
-  to_port           = 15017
-  protocol          = "tcp"
-  security_group_id = module.eks.node_security_group_id
-  cidr_blocks       = [module.vpc.vpc_cidr_block]
-  description       = "Allow Istio webhook traffic"
+  security_group_id        = module.eks.node_security_group_id
 }
