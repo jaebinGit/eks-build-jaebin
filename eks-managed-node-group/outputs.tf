@@ -46,7 +46,7 @@ output "alb_security_group_id" {
 locals {
   worker_sg_ids = flatten([
     for ng_name, ng_info in module.eks.eks_managed_node_groups :
-    ng_info["resources"]["security_group_ids"]
+    ng_info.remote_access_security_group_id
   ])
 }
 
