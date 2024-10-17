@@ -32,16 +32,16 @@ module "eks" {
 
   # EKS Managed Node Group
   eks_managed_node_group_defaults = {
-    instance_types = ["t3.small"]
+    instance_types = ["t3.medium."]
   }
 
   eks_managed_node_groups = {
     node = {
       min_size     = 1
-      max_size     = 4
+      max_size     = 2
       desired_size = 1
 
-      instance_types = ["t3.xlarge"]
+      instance_types = ["m5.large"]
     }
   }
 }
