@@ -44,8 +44,8 @@ output "alb_security_group_id" {
 
 # 1. AWS 데이터 소스를 사용하여 EKS 노드 그룹 정보 가져오기
 data "aws_eks_node_group" "worker_node_groups" {
-  for_each       = module.eks.eks_managed_node_groups
-  cluster_name   = module.eks.cluster_id
+  for_each        = module.eks.eks_managed_node_groups
+  cluster_name    = module.eks.cluster_name
   node_group_name = each.key
 }
 
@@ -67,4 +67,14 @@ resource "aws_security_group_rule" "allow_api_server_to_worker_nodes_ingress" {
   security_group_id        = each.value
   source_security_group_id = module.eks.cluster_security_group_id
   description              = "Allow API server to communicate with worker nodes on port 443"
+}
+
+resource "aws_security_group_rule" "allow_istiod_webhook" {
+  type              = "ingress"
+  from_port         = 15017
+  to_port           = 15017
+  protocol          = "tcp"
+  security_group_id = module.eks.node_security_group_id
+  cidr_blocks       = [module.vpc.vpc_cidr_block]
+  description       = "Allow Istio webhook traffic"
 }
