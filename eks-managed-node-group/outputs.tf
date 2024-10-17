@@ -42,23 +42,15 @@ output "alb_security_group_id" {
   value       = aws_security_group.alb_sg.id
 }
 
-# 1. AWS 데이터 소스를 사용하여 EKS 노드 그룹 정보 가져오기
-data "aws_eks_node_group" "worker_node_groups" {
-  for_each        = module.eks.eks_managed_node_groups
-  cluster_name    = module.eks.cluster_name
-  node_group_name = each.key
-
-  depends_on = [module.eks]
-}
-
-# 2. 워커 노드의 보안 그룹 ID 추출
+# 1. 워커 노드의 보안 그룹 ID 추출
 locals {
   worker_sg_ids = flatten([
-    for ng in data.aws_eks_node_group.worker_node_groups : ng.value.resources.security_groups
+    for ng_name, ng_info in module.eks.eks_managed_node_groups :
+    ng_info["resources"]["security_group_ids"]
   ])
 }
 
-# 3. 보안 그룹 규칙 생성
+# 2. 보안 그룹 규칙 생성
 resource "aws_security_group_rule" "allow_api_server_to_worker_nodes_ingress" {
   for_each = toset(local.worker_sg_ids)
 
