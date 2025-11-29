@@ -78,7 +78,7 @@ resource "aws_db_instance" "mysql_instance" {
   identifier          = "mysql-instance-1"            # 인스턴스 식별자
   instance_class      = "db.t3.micro"                # 최소 사양 인스턴스 클래스 (ARM 기반)
   engine              = "mysql"                       # MySQL 엔진 사용
-  engine_version      = "8.0.34"                      # 최신 안정 버전 사용
+  engine_version      = "8.0.43"                      # 최신 안정 버전 사용
   allocated_storage   = 20                            # 최소 스토리지(20GB)
   storage_type        = "gp2"                         # 일반 SSD 사용
   username            = "admin"                       # 마스터 사용자
